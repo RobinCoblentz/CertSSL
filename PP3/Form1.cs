@@ -356,6 +356,28 @@ namespace PP3
             }
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            MongoClient dbClient = new MongoClient("mongodb+srv://dbUser:LGNYQijN2ZSmiFel@cluster0.hqef6.mongodb.net/client?retryWrites=true&w=majority");
+            var database = dbClient.GetDatabase("client");
+            var collection = database.GetCollection<Profil>("profile");
 
+
+            var users = collection
+            .Find("{}")
+            .ToListAsync()
+            .Result;
+
+            foreach (var user in users)
+            {
+                if (user.Name == textBoxCompagny.Text)
+                {
+                    collection.DeleteOne(user.ToJson());
+                }
+            }
+
+            UpdateUser();
+            textBoxClient.Text = "";
+        }
     }
 }
